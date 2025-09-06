@@ -1,0 +1,170 @@
+# 📄 Product Requirements Document (PRD)
+## Projet : Plateforme de gestion de produits numériques (IPTV, Netflix, etc.)
+
+---
+
+## 🎯 Objectif
+Développer une plateforme web permettant de gérer :
+- Les plateformes fournisseurs (panels).
+- Les produits numériques (par durée, prix, stock).
+- Les clients (CRM simple).
+- Les ventes (gestion du stock, facturation).
+- Les rapports financiers (bénéfices, dépenses, soldes).
+- La configuration avancée (paramètres, notifications, personnalisation).
+
+Technologies prévues :
+- **Frontend** : React.js (template UI/UX).
+- **Backend** : API REST (Node.js/Express ou équivalent).
+- **Database** : Cloudflare D1 (SQLite compatible).
+- **Hébergement** : Cloudflare Pages + Workers.
+
+---
+
+## 🗄️ Base de Données
+
+### 1. Plateformes (`plateformes`)
+| Champ              | Type        | Description |
+|--------------------|------------|-------------|
+| id_plateforme      | INT (PK)   | Identifiant unique |
+| nom                | TEXT       | Nom de la plateforme (ex : DAR IPTV) |
+| description        | TEXT       | Description courte |
+| url                | TEXT       | Lien du site fournisseur |
+| devise             | TEXT       | Devise utilisée (DZD, USD, EUR) |
+| created_at         | DATETIME   | Date de création |
+| updated_at         | DATETIME   | Dernière modification |
+
+---
+
+### 2. Historique de recharges (`recharges`)
+| Champ              | Type        | Description |
+|--------------------|------------|-------------|
+| id_recharge        | INT (PK)   | Identifiant unique |
+| id_plateforme (FK) | INT        | Lien vers plateforme |
+| montant            | DECIMAL    | Montant rechargé en DZD |
+| preuve_paiement    | TEXT       | Lien image (upload) |
+| statut             | TEXT       | "Payé" / "En attente" |
+| date_recharge      | DATETIME   | Date de la recharge |
+
+---
+
+### 3. Produits (`produits`)
+| Champ                | Type        | Description |
+|----------------------|-------------|-------------|
+| id_produit           | INT (PK)    | Identifiant unique |
+| nom                  | TEXT        | Nom du produit (ex : IPTV 12 mois) |
+| categorie            | TEXT        | Catégorie (IPTV, Netflix, Autres) |
+| duree                | TEXT        | Durée d’abonnement (1w, 1m, 3m, 6m, 12m) |
+| description          | TEXT        | Description courte |
+| id_plateforme (FK)   | INT         | Fournisseur associé |
+| stock                | INT         | Stock actuel |
+| seuil_alerte         | INT         | Seuil de stock bas |
+| prix_achat_moyen     | DECIMAL     | Coût moyen |
+| marge                | DECIMAL     | % marge |
+| prix_vente_calcule   | DECIMAL     | Prix de vente généré automatiquement |
+| created_at           | DATETIME    | Date ajout |
+
+---
+
+### 4. Clients (`clients`)
+| Champ          | Type        | Description |
+|----------------|-------------|-------------|
+| id_client      | INT (PK)    | Identifiant unique |
+| nom_complet    | TEXT        | Nom et prénom |
+| telephone      | TEXT        | Numéro de téléphone |
+| wilaya         | TEXT        | Wilaya |
+| email          | TEXT        | Email |
+| adresse        | TEXT        | Adresse complète |
+| facebook       | TEXT        | Lien Facebook |
+| instagram      | TEXT        | Lien Instagram |
+| notes          | TEXT        | Remarques diverses |
+| created_at     | DATETIME    | Date d’inscription |
+
+---
+
+### 5. Ventes (`ventes`)
+| Champ               | Type        | Description |
+|---------------------|-------------|-------------|
+| id_vente            | INT (PK)    | Identifiant unique |
+| id_plateforme (FK)  | INT         | Fournisseur utilisé |
+| id_produit (FK)     | INT         | Produit vendu |
+| id_client (FK)      | INT         | Client associé |
+| quantite            | INT         | Quantité vendue |
+| prix_unitaire       | DECIMAL     | Prix unitaire en DZD |
+| total               | DECIMAL     | Prix total |
+| date_vente          | DATETIME    | Date de la vente |
+| methode_paiement    | TEXT        | Espèce, CCP, BaridiMob, etc. |
+| statut_paiement     | TEXT        | Payé / En attente |
+| notes               | TEXT        | Remarques |
+
+---
+
+### 6. Paramètres (`parametres`)
+| Champ               | Type        | Description |
+|---------------------|-------------|-------------|
+| id_parametre        | INT (PK)    | Identifiant unique |
+| marge_defaut        | DECIMAL     | Marge appliquée par défaut |
+| taux_change         | DECIMAL     | Taux de change marché noir |
+| devise_principale   | TEXT        | DZD par défaut |
+| theme               | TEXT        | Thème appliqué |
+| langue              | TEXT        | Langue interface |
+| notifications       | TEXT        | JSON (alertes, emails) |
+
+---
+
+## ⚙️ Fonctionnalités par Module
+
+### 1. Gestion des Plateformes
+- Ajout/modification/suppression.
+- Recharge avec historique + upload preuve paiement.
+- Statistiques globales (total chargé, payé, en attente).
+
+### 2. Produits
+- Ajout de produits avec calcul automatique du prix de vente.
+- Suivi du stock en temps réel.
+- Alerte stock bas.
+
+### 3. Clients
+- Base de données clients complète.
+- Historique des achats par client.
+- Suivi paiements (soldes dus).
+
+### 4. Ventes
+- Ajout rapide de ventes.
+- Sélection produit depuis stock.
+- Prix unitaire modifiable à la main.
+- Facture / reçu automatique.
+- Intégration avec la fiche client.
+
+### 5. Rapports Financiers
+- Rapports : journalier, hebdomadaire, mensuel, annuel.
+- Export en **PDF / CSV**.
+- Détails : total achats, total ventes, bénéfices nets.
+
+### 6. Paramètres
+- Configuration globale (prix, taux change, marges).
+- Gestion des catégories produits et périodes.
+- Notifications : stock bas, factures impayées, etc.
+- Interface personnalisable (logo, thème, couleurs).
+
+### 7. Sécurité & Utilisateurs
+- Gestion multi-utilisateurs.
+- Droits d’accès (admin, vendeur).
+- Sauvegarde et export de la base.
+
+---
+
+## 📊 Statistiques (Dashboards)
+- **Accueil Plateformes** : Nb plateformes, montant total rechargé, dettes en attente.
+- **Accueil Produits** : Nb produits, stock total, alertes.
+- **Accueil Clients** : Nb clients, top acheteurs, paiements en retard.
+- **Accueil Ventes** : Nb ventes du jour, CA total, top produits vendus.
+
+---
+
+## 📤 Livrables
+- **Version MVP** avec modules : Plateformes, Produits, Clients, Ventes.
+- **Version complète** avec : Rapports financiers, Notifications, Paramètres avancés.
+- **Export PDF/CSV** intégré.
+- **Interface React.js** moderne avec tableau de bord.
+
+---

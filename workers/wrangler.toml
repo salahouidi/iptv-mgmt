@@ -1,0 +1,31 @@
+name = "iptv-management-api"
+main = "src/worker.js"
+compatibility_date = "2024-01-01"
+
+[env.production]
+name = "iptv-management-api"
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "iptv-management-db"
+database_id = "615110fe-9d33-420f-9314-5eb8a18023d5"
+
+[env.development]
+name = "iptv-management-api-dev"
+[[env.development.d1_databases]]
+binding = "DB"
+database_name = "iptv-management-db"
+database_id = "615110fe-9d33-420f-9314-5eb8a18023d5"
+
+# D1 Database Configuration (default)
+[[d1_databases]]
+binding = "DB"
+database_name = "iptv-management-db"
+database_id = "615110fe-9d33-420f-9314-5eb8a18023d5"
+
+# CORS Configuration
+[vars]
+CORS_ORIGIN = "*"
+
+# Environment variables for production
+[env.production.vars]
+CORS_ORIGIN = "*"

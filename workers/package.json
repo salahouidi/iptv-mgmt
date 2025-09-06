@@ -1,0 +1,34 @@
+{
+  "name": "iptv-management-api",
+  "version": "1.0.0",
+  "description": "Cloudflare Workers API for IPTV Management Platform",
+  "main": "src/worker.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:staging": "wrangler deploy --env development",
+    "deploy:production": "wrangler deploy --env production",
+    "db:create": "wrangler d1 create iptv-management-db",
+    "db:schema": "wrangler d1 execute iptv-management-db --file=../database/schema.sql",
+    "db:seed": "wrangler d1 execute iptv-management-db --file=../database/seed.sql",
+    "db:reset": "npm run db:schema && npm run db:seed",
+    "db:query": "wrangler d1 execute iptv-management-db --command",
+    "logs": "wrangler tail",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "dependencies": {
+    "itty-router": "^4.0.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "d1",
+    "iptv",
+    "api"
+  ],
+  "author": "IPTV Management Team",
+  "license": "MIT"
+}

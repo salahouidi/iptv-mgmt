@@ -1,0 +1,26 @@
+name = "iptv-management-frontend"
+compatibility_date = "2024-01-01"
+
+[env.production]
+name = "iptv-management-frontend"
+
+[env.development]
+name = "iptv-management-frontend-dev"
+
+# Build configuration for Cloudflare Pages
+[build]
+command = "npm run build"
+publish = "dist"
+
+# Environment variables for frontend
+[env.production.vars]
+VITE_API_BASE_URL = "https://iptv-management-api.houidi-salaheddine.workers.dev/api"
+VITE_USE_MOCK_DATA = "false"
+VITE_ENVIRONMENT = "production"
+VITE_DEBUG = "false"
+
+[env.development.vars]
+VITE_API_BASE_URL = "https://iptv-management-api.houidi-salaheddine.workers.dev/api"
+VITE_USE_MOCK_DATA = "false"
+VITE_ENVIRONMENT = "development"
+VITE_DEBUG = "true"
