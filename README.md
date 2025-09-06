@@ -1,192 +1,346 @@
-# TailAdmin React - Free React Tailwind Admin Dashboard Template
+# IPTV Management System
 
-TailAdmin is a free and open-source admin dashboard template built on **React and Tailwind CSS**, providing developers
-with everything they need to create a comprehensive, data-driven back-end,
-dashboard, or admin panel solution for upcoming web projects.
+A comprehensive IPTV business management system built with modern web technologies. This application provides a complete solution for managing IPTV platforms, products, clients, sales, and administrative operations.
 
-With TailAdmin, you get access to all the necessary dashboard UI components, elements, and pages required to build a
-feature-rich and complete dashboard or admin panel. Whether you're building dashboard or admin panel for a complex web
-application or a simple website, TailAdmin is the perfect solution to help you get up and running quickly.
+![IPTV Management System Preview](./banner.png)
 
-![TailAdmin React.js Dashboard Preview](./banner.png)
+## 🚀 Live Demo
 
-## Overview
+- **Frontend:** [https://4ec14798.iptv-management-frontend.pages.dev](https://4ec14798.iptv-management-frontend.pages.dev)
+- **Backend API:** [https://iptv-management-api.houidi-salaheddine.workers.dev/api](https://iptv-management-api.houidi-salaheddine.workers.dev/api)
+- **Login Credentials:** Username: `ADMIN` | Password: `admin123`
 
-TailAdmin provides essential UI components and layouts for building feature-rich, data-driven admin dashboards and
-control panels. It's built on:
+## 🏗️ Architecture
 
-- React 19
-- TypeScript
-- Tailwind CSS
+This system is built with a modern, scalable architecture:
 
-### Quick Links
+### Frontend
+- **React 19** with TypeScript
+- **Tailwind CSS** for styling
+- **Vite** for build tooling
+- **React Router** for navigation
+- **Context API** for state management
 
-- [✨ Visit Website](https://tailadmin.com)
-- [📄 Documentation](https://tailadmin.com/docs)
-- [⬇️ Download](https://tailadmin.com/download)
-- [🖌️ Figma Design File (Community Edition)](https://www.figma.com/community/file/1214477970819985778)
-- [⚡ Get PRO Version](https://tailadmin.com/pricing)
+### Backend
+- **Cloudflare Workers** for serverless API
+- **Cloudflare D1** SQLite database
+- **RESTful API** design
+- **CORS** enabled for cross-origin requests
 
-### Demos
+### Deployment
+- **Frontend:** Cloudflare Pages
+- **Backend:** Cloudflare Workers
+- **Database:** Cloudflare D1 (SQLite)
 
-- [Free Version](https://free-react-demo.tailadmin.com/)
-- [Pro Version](https://react-demo.tailadmin.com)
+## ✨ Features
 
-### Other Versions
+### 📊 Dashboard & Analytics
+- Real-time business statistics and KPIs
+- Interactive charts and data visualization
+- Revenue tracking and performance metrics
+- Recent activity monitoring
 
-- [HTML Version](https://github.com/TailAdmin/tailadmin-free-tailwind-dashboard-template)
-- [Next.js Version](https://github.com/TailAdmin/free-nextjs-admin-dashboard)
-- [Vue.js Version](https://github.com/TailAdmin/vue-tailwind-admin-dashboard)
+### 🏢 Platform Management
+- Multi-platform support (point-based and currency-based)
+- Platform configuration and settings
+- Balance and recharge management
+- Automatic pricing calculations
 
-## Installation
+### 📦 Product Management
+- Comprehensive product catalog
+- Category-based organization
+- Stock tracking and low-stock alerts
+- Flexible pricing models (points/currency)
+- Duration-based products (1 month, 3 months, 6 months, 1 year)
+
+### 👥 Client Management
+- Complete client database
+- Client history and transaction tracking
+- Simplified registration process
+- Client activity monitoring
+
+### 💰 Sales Management
+- Streamlined sales process
+- Automatic stock deduction
+- Payment method tracking
+- Sales history and reporting
+- Invoice generation
+
+### 🔐 Authentication & Security
+- Secure admin authentication
+- Role-based access control
+- Session management
+- Protected routes
+
+### 🎨 User Interface
+- Modern, responsive design
+- Dark/Light theme support
+- Mobile-friendly interface
+- Intuitive navigation
+- Consistent layout patterns
+
+## 🛠️ Installation
 
 ### Prerequisites
 
-To get started with TailAdmin, ensure you have the following prerequisites installed and set up:
+- **Node.js** 18.x or later (recommended: Node.js 20.x+)
+- **npm** or **yarn** package manager
+- **Git** for version control
 
-- Node.js 18.x or later (recommended to use Node.js 20.x or later)
+### Local Development Setup
 
-### Cloning the Repository
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/salahouidi/iptv-mgmt.git
+   cd iptv-mgmt
+   ```
 
-Clone the repository using the following command:
-
-```bash
-git clone https://github.com/TailAdmin/free-react-tailwind-admin-dashboard.git
-```
-
-> Windows Users: place the repository near the root of your drive if you face issues while cloning.
-
-1. Install dependencies:
-
+2. **Install frontend dependencies:**
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
-   > Use the `--legacy-peer-deps` flag, if you face issues while installing.
+3. **Install backend dependencies:**
+   ```bash
+   cd workers
+   npm install
+   cd ..
+   ```
 
-2. Start the development server:
+4. **Environment Configuration:**
+   ```bash
+   # Copy environment template
+   cp .env.example .env.development
+
+   # Edit the environment variables as needed
+   ```
+
+5. **Start the development servers:**
+
+   **Frontend:**
    ```bash
    npm run dev
-   # or
-   yarn dev
    ```
 
-## Components
+   **Backend (in another terminal):**
+   ```bash
+   cd workers
+   npm run dev
+   ```
 
-TailAdmin is a pre-designed starting point for building a web-based dashboard using React.js and Tailwind CSS. The
-template includes:
+6. **Access the application:**
+   - Frontend: `http://localhost:5173`
+   - Backend API: `http://localhost:8787`
 
-- Sophisticated and accessible sidebar
-- Data visualization components
-- Prebuilt profile management and 404 page
-- Tables and Charts(Line and Bar)
-- Authentication forms and input elements
-- Alerts, Dropdowns, Modals, Buttons and more
-- Can't forget Dark Mode 🕶️
+## 🚀 Deployment
 
-All components are built with React and styled using Tailwind CSS for easy customization.
+### Production Deployment
 
-## Feature Comparison
+This application is designed for deployment on Cloudflare's edge infrastructure:
 
-### Free Version
+#### Frontend (Cloudflare Pages)
+```bash
+# Build the frontend
+npm run build
 
-- 1 Unique Dashboard
-- 30+ dashboard components
-- 50+ UI elements
-- Basic Figma design files
-- Community support
+# Deploy to Cloudflare Pages
+wrangler pages deploy dist --project-name iptv-management-frontend
+```
 
-### Pro Version
+#### Backend (Cloudflare Workers)
+```bash
+# Navigate to workers directory
+cd workers
 
-- 5 Unique Dashboards: Analytics, Ecommerce, Marketing, CRM, Stocks (more coming soon)
-- 400+ dashboard components and UI elements
-- Complete Figma design file
-- Email support
+# Deploy the API
+wrangler deploy
+```
 
-To learn more about pro version features and pricing, visit our [pricing page](https://tailadmin.com/pricing).
+#### Database Setup (Cloudflare D1)
+```bash
+# Create D1 database
+wrangler d1 create iptv-management-db
 
-## Changelog
+# Run migrations
+wrangler d1 migrations apply iptv-management-db --local
+wrangler d1 migrations apply iptv-management-db --remote
+```
 
-### Version 2.0.2 - [March 25, 2025]
+### Environment Variables
 
-- Upgraded to React 19
-- Included overrides for packages to prevent peer dependency errors.
-- Migrated from react-flatpickr to flatpickr package for React 19 support
+Create the following environment files:
 
-### Version 2.0.1 - [February 27, 2025]
+**.env.development:**
+```env
+VITE_API_BASE_URL=http://localhost:8787/api
+VITE_APP_ENV=development
+```
 
-#### Update Overview
+**.env.production:**
+```env
+VITE_API_BASE_URL=https://your-worker.your-subdomain.workers.dev/api
+VITE_APP_ENV=production
+```
 
-- Upgraded to Tailwind CSS v4 for better performance and efficiency.
-- Updated class usage to match the latest syntax and features.
-- Replaced deprecated class and optimized styles.
+## 📁 Project Structure
 
-#### Next Steps
+```
+iptv-mgmt/
+├── src/                          # Frontend source code
+│   ├── components/               # Reusable UI components
+│   │   ├── auth/                # Authentication components
+│   │   ├── common/              # Common UI components
+│   │   ├── iptv/                # IPTV-specific components
+│   │   └── ui/                  # Base UI components
+│   ├── contexts/                # React Context providers
+│   ├── hooks/                   # Custom React hooks
+│   ├── pages/                   # Page components
+│   │   ├── AuthPages/           # Authentication pages
+│   │   └── IPTV/                # IPTV management pages
+│   ├── types/                   # TypeScript type definitions
+│   └── utils/                   # Utility functions
+├── workers/                     # Backend source code
+│   ├── src/
+│   │   ├── routes/              # API route handlers
+│   │   └── utils/               # Backend utilities
+│   └── wrangler.toml           # Cloudflare Workers config
+├── database/                    # Database schema and migrations
+│   ├── migrations/              # SQL migration files
+│   ├── schema.sql              # Database schema
+│   └── seed.sql                # Sample data
+└── public/                     # Static assets
+```
 
-- Run npm install or yarn install to update dependencies.
-- Check for any style changes or compatibility issues.
-- Refer to the Tailwind CSS v4 [Migration Guide](https://tailwindcss.com/docs/upgrade-guide) on this release. if needed.
-- This update keeps the project up to date with the latest Tailwind improvements. 🚀
+## 🔧 API Endpoints
 
-### Version 2.0.0 - [February 2025]
+The backend provides a comprehensive RESTful API:
 
-A major update with comprehensive redesign and modern React patterns implementation.
+### Authentication
+- `POST /api/auth/login` - Admin login
+- `POST /api/auth/logout` - Admin logout
 
-#### Major Improvements
+### Dashboard
+- `GET /api/dashboard/stats` - Get dashboard statistics
 
-- Complete UI redesign with modern React patterns
-- New features: collapsible sidebar, chat, and calendar
-- Improved performance and accessibility
-- Updated data visualization using ApexCharts
+### Platforms
+- `GET /api/plateformes` - List all platforms
+- `POST /api/plateformes` - Create new platform
+- `PUT /api/plateformes/:id` - Update platform
+- `DELETE /api/plateformes/:id` - Delete platform
 
-#### Key Features
+### Products
+- `GET /api/produits` - List products (with filters)
+- `POST /api/produits` - Create new product
+- `PUT /api/produits/:id` - Update product
+- `DELETE /api/produits/:id` - Delete product
 
-- Redesigned dashboards (Ecommerce, Analytics, Marketing, CRM)
-- Enhanced navigation with React Router integration
-- Advanced tables with sorting and filtering
-- Calendar with drag-and-drop support
-- New UI components and improved existing ones
+### Clients
+- `GET /api/clients` - List clients (with filters)
+- `POST /api/clients` - Create new client
+- `PUT /api/clients/:id` - Update client
+- `DELETE /api/clients/:id` - Delete client
 
-#### Breaking Changes
+### Sales
+- `GET /api/ventes` - List sales (with filters)
+- `POST /api/ventes` - Create new sale
+- `PUT /api/ventes/:id` - Update sale
+- `DELETE /api/ventes/:id` - Delete sale
 
-- Updated sidebar component API
-- Migrated charts to ApexCharts
-- Revised authentication system
+### Recharges
+- `GET /api/recharges` - List recharges
+- `POST /api/recharges` - Create new recharge
 
-[Read more](https://tailadmin.com/docs/update-logs/react) on this release.
+## 🗄️ Database Schema
 
-### Version 1.3.7 - [June 20, 2024]
+The application uses SQLite with the following main tables:
 
-#### Enhancements
+- **plateformes** - IPTV platform configurations
+- **produits** - Product catalog with pricing
+- **clients** - Customer database
+- **ventes** - Sales transactions
+- **recharges** - Platform balance recharges
+- **administrateurs** - Admin user accounts
 
-1. Remove Repetition of DefaultLayout in every Pages
-2. Add ClickOutside Component for reduce repeated functionality in Header Message, Notification and User Dropdowns.
+## 🧪 Testing
 
-### Version 1.3.6 - [Jan 31, 2024]
+### Running Tests
+```bash
+# Run frontend tests
+npm test
 
-#### Enhancements
+# Run backend tests
+cd workers
+npm test
+```
 
-1. Integrate flatpickr in [Date Picker/Form Elements]
-2. Change color after select an option [Select Element/Form Elements].
-3. Make it functional [Multiselect Dropdown/Form Elements].
-4. Make best value editable [Pricing Table One/Pricing Table].
-5. Rearrange Folder structure.
+### Manual Testing
+1. Access the live demo at the provided URL
+2. Login with the demo credentials
+3. Test all CRUD operations
+4. Verify responsive design on different devices
 
-### Version 1.2.0 - [Apr 28, 2023]
+## 📝 Usage
 
-- Add Typescript in TailAdmin React.
+### Creating a Sale
+1. Navigate to "Ventes" → "Nouvelle Vente"
+2. Select a platform
+3. Choose a product
+4. Select or create a client
+5. Choose payment method
+6. Complete the sale
 
-### Version 1.0.0 - Initial Release - [Mar 13, 2023]
+### Managing Products
+1. Go to "Articles" page
+2. Add new products with pricing
+3. Set stock quantities
+4. Configure categories and durations
 
-- Initial release of TailAdmin React.
+### Platform Configuration
+1. Access "Plateformes" page
+2. Configure point-based or currency-based systems
+3. Set up automatic pricing rules
+4. Manage platform balances
 
-## License
+## 🤝 Contributing
 
-TailAdmin React.js Free Version is released under the MIT License.
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
-## Support
+### Development Guidelines
+1. Follow the existing code style and patterns
+2. Write meaningful commit messages
+3. Test your changes thoroughly
+4. Update documentation as needed
 
-If you find this project helpful, please consider giving it a star on GitHub. Your support helps us continue developing
-and maintaining this template.
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+## 🆘 Support
+
+If you encounter any issues or have questions:
+
+1. Check the [Issues](https://github.com/salahouidi/iptv-mgmt/issues) page
+2. Create a new issue with detailed information
+3. Provide steps to reproduce any bugs
+
+## 🙏 Acknowledgments
+
+- Built with [React](https://reactjs.org/) and [TypeScript](https://www.typescriptlang.org/)
+- Styled with [Tailwind CSS](https://tailwindcss.com/)
+- Deployed on [Cloudflare](https://cloudflare.com/) infrastructure
+- Based on TailAdmin template for initial UI components
+
+## 📊 Project Status
+
+- ✅ **Frontend:** Fully functional with responsive design
+- ✅ **Backend:** Complete API with all CRUD operations
+- ✅ **Database:** Comprehensive schema with sample data
+- ✅ **Deployment:** Live production environment
+- ✅ **Authentication:** Secure admin access
+- ✅ **Documentation:** Complete setup and usage guides
+
+---
+
+**Live Demo:** [https://4ec14798.iptv-management-frontend.pages.dev](https://4ec14798.iptv-management-frontend.pages.dev)
+
+**Repository:** [https://github.com/salahouidi/iptv-mgmt](https://github.com/salahouidi/iptv-mgmt)
