@@ -23,8 +23,9 @@ export default function AdministratorForm({
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'Admin' as 'Admin' | 'Super Admin',
-    status: 'Actif' as 'Actif' | 'Inactif'
+    role: 'Admin' as 'Super Admin' | 'Admin' | 'Operator' | 'Custom',
+    status: 'Actif' as 'Actif' | 'Inactif' | 'Suspendu',
+    notes: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -36,11 +37,12 @@ export default function AdministratorForm({
     if (administrator) {
       setFormData({
         username: administrator.username,
-        email: administrator.email,
+        email: administrator.email || '',
         password: '',
         confirmPassword: '',
         role: administrator.role,
-        status: administrator.status
+        status: administrator.status,
+        notes: administrator.notes || ''
       });
     } else {
       setFormData({
@@ -49,7 +51,8 @@ export default function AdministratorForm({
         password: '',
         confirmPassword: '',
         role: 'Admin',
-        status: 'Actif'
+        status: 'Actif',
+        notes: ''
       });
     }
     setErrors({});
@@ -62,9 +65,8 @@ export default function AdministratorForm({
       newErrors.username = 'Le nom d\'utilisateur est requis';
     }
 
-    if (!formData.email.trim()) {
-      newErrors.email = 'L\'email est requis';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    // Email is optional
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Format d\'email invalide';
     }
 
@@ -97,18 +99,20 @@ export default function AdministratorForm({
       if (isEditing) {
         const updateData: UpdateAdministratorData = {
           username: formData.username,
-          email: formData.email,
+          email: formData.email || undefined,
           role: formData.role,
-          status: formData.status
+          status: formData.status,
+          notes: formData.notes || undefined
         };
         await onSubmit(updateData);
       } else {
         const createData: CreateAdministratorData = {
           username: formData.username,
-          email: formData.email,
+          email: formData.email || undefined,
           password: formData.password,
           role: formData.role,
-          status: formData.status
+          status: formData.status,
+          notes: formData.notes || undefined
         };
         await onSubmit(createData);
       }
@@ -190,8 +194,10 @@ export default function AdministratorForm({
               onChange={(e) => handleChange('role', e.target.value)}
               className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
             >
-              <option value="Admin">Admin</option>
               <option value="Super Admin">Super Admin</option>
+              <option value="Admin">Admin</option>
+              <option value="Operator">Operator</option>
+              <option value="Custom">Custom</option>
             </select>
           </div>
 
@@ -206,6 +212,7 @@ export default function AdministratorForm({
             >
               <option value="Actif">Actif</option>
               <option value="Inactif">Inactif</option>
+              <option value="Suspendu">Suspendu</option>
             </select>
           </div>
 
@@ -270,6 +277,19 @@ export default function AdministratorForm({
               </div>
             </>
           )}
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Notes (optionnel)
+            </label>
+            <textarea
+              value={formData.notes}
+              onChange={(e) => handleChange('notes', e.target.value)}
+              rows={3}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+              placeholder="Ajoutez des notes sur cet administrateur..."
+            />
+          </div>
 
           <div className="flex gap-3 pt-4">
             <button

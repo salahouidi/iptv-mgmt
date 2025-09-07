@@ -238,3 +238,147 @@ export interface PointPricingRule {
 // Enhanced create/update types for new system
 export type CreateProductPanelData = Omit<ProductPanel, 'id_association' | 'date_creation'>;
 export type CreatePointPricingRuleData = Omit<PointPricingRule, 'id_rule' | 'date_creation'>;
+
+// Administrator Management Types
+export interface Administrator {
+  id_admin: number;
+  username: string;
+  email?: string;
+  role: 'Super Admin' | 'Admin' | 'Operator' | 'Custom';
+  status: 'Actif' | 'Inactif' | 'Suspendu';
+  permissions?: string; // JSON string for custom permissions
+  created_at: string;
+  updated_at: string;
+  last_login?: string;
+  created_by?: number;
+  notes?: string;
+}
+
+export interface AdminActivity {
+  id_activity: number;
+  id_admin: number;
+  action: string;
+  description?: string;
+  ip_address?: string;
+  user_agent?: string;
+  resource_type?: string;
+  resource_id?: number;
+  old_values?: string; // JSON string
+  new_values?: string; // JSON string
+  created_at: string;
+  username?: string; // From JOIN with administrators table
+}
+
+export interface AdministratorWithStats extends Administrator {
+  total_activities: number;
+  last_activity?: string;
+  activities_last_7_days: number;
+  activities_last_30_days: number;
+}
+
+// Filter types
+export interface AdministratorFilters {
+  role?: string;
+  status?: string;
+  search?: string;
+  created_after?: string;
+  created_before?: string;
+  last_login_after?: string;
+  last_login_before?: string;
+}
+
+export interface AdminActivityFilters {
+  id_admin?: number;
+  action?: string;
+  resource_type?: string;
+  date_from?: string;
+  date_to?: string;
+  search?: string;
+}
+
+// Create/Update types
+export interface CreateAdministratorData {
+  username: string;
+  email?: string;
+  password: string;
+  role: 'Super Admin' | 'Admin' | 'Operator' | 'Custom';
+  status?: 'Actif' | 'Inactif' | 'Suspendu';
+  permissions?: string;
+  notes?: string;
+}
+
+export interface UpdateAdministratorData {
+  username?: string;
+  email?: string;
+  role?: 'Super Admin' | 'Admin' | 'Operator' | 'Custom';
+  status?: 'Actif' | 'Inactif' | 'Suspendu';
+  permissions?: string;
+  notes?: string;
+}
+
+export interface UpdateCredentialsData {
+  username?: string;
+  new_password: string;
+  confirm_password: string;
+  current_password: string;
+}
+
+export interface LogActivityData {
+  id_admin: number;
+  action: string;
+  description?: string;
+  ip_address?: string;
+  user_agent?: string;
+  resource_type?: string;
+  resource_id?: number;
+  old_values?: any;
+  new_values?: any;
+}
+
+// Permission system types
+export interface Permission {
+  module: string;
+  actions: string[]; // ['read', 'create', 'update', 'delete']
+}
+
+export interface RolePermissions {
+  role: string;
+  permissions: Permission[];
+}
+
+// Default role permissions
+export const DEFAULT_ROLE_PERMISSIONS: RolePermissions[] = [
+  {
+    role: 'Super Admin',
+    permissions: [
+      { module: 'administrators', actions: ['read', 'create', 'update', 'delete'] },
+      { module: 'plateformes', actions: ['read', 'create', 'update', 'delete'] },
+      { module: 'produits', actions: ['read', 'create', 'update', 'delete'] },
+      { module: 'clients', actions: ['read', 'create', 'update', 'delete'] },
+      { module: 'ventes', actions: ['read', 'create', 'update', 'delete'] },
+      { module: 'recharges', actions: ['read', 'create', 'update', 'delete'] },
+      { module: 'dashboard', actions: ['read'] },
+      { module: 'parametres', actions: ['read', 'update'] }
+    ]
+  },
+  {
+    role: 'Admin',
+    permissions: [
+      { module: 'plateformes', actions: ['read', 'create', 'update'] },
+      { module: 'produits', actions: ['read', 'create', 'update', 'delete'] },
+      { module: 'clients', actions: ['read', 'create', 'update', 'delete'] },
+      { module: 'ventes', actions: ['read', 'create', 'update'] },
+      { module: 'recharges', actions: ['read', 'create'] },
+      { module: 'dashboard', actions: ['read'] }
+    ]
+  },
+  {
+    role: 'Operator',
+    permissions: [
+      { module: 'clients', actions: ['read', 'create', 'update'] },
+      { module: 'ventes', actions: ['read', 'create'] },
+      { module: 'produits', actions: ['read'] },
+      { module: 'dashboard', actions: ['read'] }
+    ]
+  }
+];

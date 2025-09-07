@@ -1,7 +1,7 @@
 // Custom React hooks for API data management
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { 
+import {
   apiClient,
   ApiResponse,
   PaginatedResponse,
@@ -17,6 +17,15 @@ import {
   ClientFilters,
   VenteFilters
 } from '../utils/api';
+import {
+  Administrator,
+  AdministratorFilters,
+  AdminActivityFilters,
+  AdminActivity,
+  CreateAdministratorData,
+  UpdateAdministratorData,
+  UpdateCredentialsData
+} from '../types/database';
 
 // Generic hook for API calls with loading and error states
 export function useApiCall<T>(
@@ -599,21 +608,238 @@ export function useFileUpload() {
   };
 }
 
-// Minimal administrator hooks for compatibility
-export function useAdministrators() {
-  return { data: [], loading: false, error: null };
+// Administrator Management Hooks
+export function useAdministrators(filters: AdministratorFilters = {}) {
+  const [data, setData] = useState<{ items: Administrator[]; total: number; page: number; totalPages: number } | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchAdministrators = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const queryParams = new URLSearchParams();
+      if (filters.role) queryParams.append('role', filters.role);
+      if (filters.status) queryParams.append('status', filters.status);
+      if (filters.search) queryParams.append('search', filters.search);
+      if (filters.created_after) queryParams.append('created_after', filters.created_after);
+      if (filters.created_before) queryParams.append('created_before', filters.created_before);
+      if (filters.last_login_after) queryParams.append('last_login_after', filters.last_login_after);
+      if (filters.last_login_before) queryParams.append('last_login_before', filters.last_login_before);
+
+      const response = await fetch(`${API_BASE_URL}/administrators?${queryParams.toString()}`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
+        setData(result.data);
+      } else {
+        throw new Error(result.error || 'Failed to fetch administrators');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+      setData(null);
+    } finally {
+      setLoading(false);
+    }
+  }, [filters]);
+
+  useEffect(() => {
+    fetchAdministrators();
+  }, [fetchAdministrators]);
+
+  return { data, loading, error, refetch: fetchAdministrators };
 }
 
 export function useAdministratorActions() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const createAdministrator = useCallback(async (data: CreateAdministratorData) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/administrators`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to create administrator');
+      }
+
+      return result.data;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const updateAdministrator = useCallback(async (id: number, data: UpdateAdministratorData) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/administrators/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to update administrator');
+      }
+
+      return result.data;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const deleteAdministrator = useCallback(async (id: number) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/administrators/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to delete administrator');
+      }
+
+      return true;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const updateCredentials = useCallback(async (data: UpdateCredentialsData) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/administrators/credentials`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to update credentials');
+      }
+
+      return result.data;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
+      throw new Error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   return {
-    createAdministrator: async () => false,
-    updateAdministrator: async () => false,
-    deleteAdministrator: async () => false,
-    loading: false,
-    error: null
+    createAdministrator,
+    updateAdministrator,
+    deleteAdministrator,
+    updateCredentials,
+    loading,
+    error
   };
 }
 
-export function useAdminActivity() {
-  return { data: [], loading: false, error: null };
+export function useAdminActivity(filters: AdminActivityFilters = {}) {
+  const [data, setData] = useState<{ items: AdminActivity[]; total: number; page: number; totalPages: number } | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchActivity = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const queryParams = new URLSearchParams();
+      if (filters.id_admin) queryParams.append('id_admin', filters.id_admin.toString());
+      if (filters.action) queryParams.append('action', filters.action);
+      if (filters.resource_type) queryParams.append('resource_type', filters.resource_type);
+      if (filters.date_from) queryParams.append('date_from', filters.date_from);
+      if (filters.date_to) queryParams.append('date_to', filters.date_to);
+      if (filters.search) queryParams.append('search', filters.search);
+
+      const response = await fetch(`${API_BASE_URL}/admin-activity?${queryParams.toString()}`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
+        setData(result.data);
+      } else {
+        throw new Error(result.error || 'Failed to fetch admin activity');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+      setData(null);
+    } finally {
+      setLoading(false);
+    }
+  }, [filters]);
+
+  useEffect(() => {
+    fetchActivity();
+  }, [fetchActivity]);
+
+  return { data, loading, error, refetch: fetchActivity };
 }

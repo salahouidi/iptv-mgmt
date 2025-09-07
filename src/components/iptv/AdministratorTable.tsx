@@ -36,6 +36,10 @@ export default function AdministratorTable({
         return 'danger' as const;
       case 'Admin':
         return 'primary' as const;
+      case 'Operator':
+        return 'warning' as const;
+      case 'Custom':
+        return 'info' as const;
       default:
         return 'secondary' as const;
     }
@@ -47,6 +51,8 @@ export default function AdministratorTable({
         return 'success' as const;
       case 'Inactif':
         return 'secondary' as const;
+      case 'Suspendu':
+        return 'danger' as const;
       default:
         return 'secondary' as const;
     }

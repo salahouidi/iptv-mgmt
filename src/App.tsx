@@ -24,6 +24,7 @@ import Parametres from "./pages/IPTV/Parametres";
 import Notifications from "./pages/IPTV/Notifications";
 import Sauvegarde from "./pages/IPTV/Sauvegarde";
 import TestPage from "./pages/IPTV/TestPage";
+import GestionAdministrateurs from "./pages/IPTV/GestionAdministrateurs";
 import ErrorBoundary from "./components/common/ErrorBoundary";
 import { ClientProvider } from "./contexts/ClientContext";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -64,6 +65,7 @@ export default function App() {
             <Route path="/rapports" element={<ErrorBoundary><Rapports /></ErrorBoundary>} />
             <Route path="/statistiques" element={<ErrorBoundary><Statistiques /></ErrorBoundary>} />
             <Route path="/parametres" element={<ErrorBoundary><Parametres /></ErrorBoundary>} />
+            <Route path="/admin-management" element={<ErrorBoundary><GestionAdministrateurs /></ErrorBoundary>} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/sauvegarde" element={<Sauvegarde />} />
             <Route path="/test" element={<TestPage />} />
